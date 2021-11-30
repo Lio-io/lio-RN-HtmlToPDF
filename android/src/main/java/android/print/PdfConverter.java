@@ -110,9 +110,17 @@ public class PdfConverter implements Runnable {
                 }
             }
         });
-        WebSettings settings = mWebView.getSettings();
-        settings.setTextZoom(100);
-        settings.setDefaultTextEncodingName("utf-8");
+        // CHANGES START
+        try {
+            WebSettings settings = mWebView.getSettings();
+            settings.setTextZoom(100);
+            settings.setAllowContentAccess(true);
+            settings.setAllowFileAccess(true);
+            settings.setDefaultTextEncodingName("utf-8");
+        } catch (Exception e) {
+            Log.d(TAG, "Failed to Access Local File", e);
+        }
+        // CHANGES END
         mWebView.loadDataWithBaseURL(mBaseURL, mHtmlString, "text/HTML", "utf-8", null);
     }
 

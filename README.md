@@ -5,11 +5,53 @@ REACT NATIVE HTML to PDF
 ORIGINAL REPO :
 github:christopherdro/react-native-html-to-pdf
 
+############################################################
+ISSUE 1
+############################################################
+PLATFORM : ANDROID
+
+ISSUE :
+-> Cannot access local cache file.
+
+CHANGES in FILE :
+-> android/src/main/java/android/print/PdfConverter.java
+
+ISSUE LINK ON GITHUB:-
+https://github.com/christopherdro/react-native-html-to-pdf/issues/210
+
+SOLUTION :
+
+1. Given Access in settings to files.
+
+====================================
+CHANGE
+====================================
+// CHANGES START
+try {
+WebSettings settings = mWebView.getSettings();
+settings.setTextZoom(100);
+settings.setAllowContentAccess(true);
+settings.setAllowFileAccess(true);
+settings.setDefaultTextEncodingName("utf-8");
+} catch (Exception e) {
+Log.d(TAG, "Failed to Access Local File", e);
+}
+// CHANGES END
+====================================
+############################################################
+
+############################################################
+ISSUE 2
+############################################################
+PLATFORM : IOS
 ISSUE :
 -> Cannot access local cache file using htmlstring.
 
 CHANGES in FILE :
 -> ios/RNHTMLtoPDF/RNHTMLtoPDF.m
+
+ISSUE LINK ON GITHUB:-
+https://github.com/christopherdro/react-native-html-to-pdf/issues/210
 
 SOLUTION :
 
@@ -30,3 +72,4 @@ dispatch_async(dispatch_get_main_queue(), ^{
 });
 // CHANGE END
 ====================================
+############################################################
