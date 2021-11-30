@@ -1,0 +1,19 @@
+{
+  "name": "lio-RN-HtmlToPDF",
+  "version": "0.11.0",
+  "scripts": {
+    "start": "node_modules/react-native/packager/packager.sh"
+  },
+  "description": "Convert html strings to PDF documents using React Native",
+  "repository": {
+    "type": "git",
+    "url": "github:christopherdro/react-native-html-to-pdf"
+  },
+  "keywords": [
+    "html",
+    "pdf",
+    "react-native"
+  ],
+  "author": "Lio",
+  "homepage": "https://github.com/Lio-io/lio-RN-HtmlToPDF"
+}
