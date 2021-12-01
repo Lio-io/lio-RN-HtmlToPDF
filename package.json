@@ -7,7 +7,7 @@
   "description": "Convert html strings to PDF documents using React Native",
   "repository": {
     "type": "git",
-    "url": "github:christopherdro/react-native-html-to-pdf"
+    "url": "https://github.com/christopherdro/react-native-html-to-pdf.git"
   },
   "keywords": [
     "html",
@@ -15,5 +15,5 @@
     "react-native"
   ],
   "author": "Lio",
-  "homepage": "https://github.com/Lio-io/lio-RN-HtmlToPDF"
+  "homepage": "https://github.com/christopherdro/react-native-html-to-pdf.git"
 }
