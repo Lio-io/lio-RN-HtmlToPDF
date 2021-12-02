@@ -175,14 +175,13 @@ RCT_EXPORT_METHOD(convert:(NSDictionary *)options
     NSString *cacheDirectory = [paths objectAtIndex:0];
     NSURL *baseURL = [NSURL fileURLWithPath:cacheDirectory isDirectory:true];
     NSURL *html_path = [NSURL fileURLWithPath:@"index.html" relativeToURL:baseURL];
-// CHANGE END
     dispatch_async(dispatch_get_main_queue(), ^{
-        // CHANGE START
-        [self->_webView loadFileURL:html_path allowingReadAccessToURL:baseURL];
-        // CHANGE END
-        // OLD
-        // [self->_webView loadHTMLString:self->_html baseURL:baseURL];
+        // REMOVE CACHE FOR OLD IMAGE ISSUE
+        NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache,WKWebsiteDataTypeMemoryCache]];
+        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^{}];
+        [self->_webView loadFileURL:html_path allowingReadAccessToURL:baseURL];        
     });
+// CHANGE END
 
     _resolveBlock = resolve;
     _rejectBlock = reject;

@@ -58,6 +58,7 @@ SOLUTION :
 1. Accessed Cache Directory path.
 2. Then generated index.html path using baseURL.
 3. Instead of passing html string we are loading html via index.html file which is stored in Cache Directory.
+4. Remove cache for old image shown issue in profile picture.
 
 ====================================
 CHANGE
@@ -68,8 +69,11 @@ NSString *cacheDirectory = [paths objectAtIndex:0];
 NSURL *baseURL = [NSURL fileURLWithPath:cacheDirectory isDirectory:true];
 NSURL *html_path = [NSURL fileURLWithPath:@"index.html" relativeToURL:baseURL];
 dispatch_async(dispatch_get_main_queue(), ^{
-[self->_webView loadFileURL:html_path allowingReadAccessToURL:baseURL];
-});
+// REMOVE CACHE FOR OLD IMAGE ISSUE
+NSSet *dataTypes = [NSSet setWithArray:@[WKWebsiteDataTypeDiskCache,WKWebsiteDataTypeMemoryCache]];
+[[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:dataTypes modifiedSince:[NSDate dateWithTimeIntervalSince1970:0] completionHandler:^{}];
+[self->_webView loadFileURL:html_path allowingReadAccessToURL:baseURL];  
+ });
 // CHANGE END
 ====================================
 ############################################################
