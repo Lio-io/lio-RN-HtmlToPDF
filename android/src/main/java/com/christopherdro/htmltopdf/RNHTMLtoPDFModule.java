@@ -53,7 +53,8 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
 
       String fileName;
       if (options.hasKey(FILE_NAME)) {
-        fileName = options.getString(FILE_NAME);
+        // fileName = options.getString(FILE_NAME);
+        fileName = "DATA_"+System.currentTimeMillis();
         if (!isFileNameValid(fileName)) {
           promise.reject(new Exception("RNHTMLtoPDF error: Invalid fileName parameter."));
           return;
@@ -91,24 +92,25 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
                 .build();
       }
 
-      convertToPDF(htmlString,
-              destinationFile,
-              options.hasKey(BASE_64) && options.getBoolean(BASE_64),
-              Arguments.createMap(),
-              promise,
-              options.hasKey(BASE_URL) ? options.getString(BASE_URL) : null,
-              pagesize
-              );
+      convertToPDF(
+        htmlString,
+        destinationFile,
+        options.hasKey(BASE_64) && options.getBoolean(BASE_64),
+        Arguments.createMap(),
+        promise,
+        options.hasKey(BASE_URL) ? options.getString(BASE_URL) : null,
+        pagesize,
+        fileName
+      );
     } catch (Exception e) {
       promise.reject(e);
     }
   }
 
-  private void convertToPDF(String htmlString, File file, boolean shouldEncode, WritableMap resultMap, Promise promise,
-      String baseURL,PrintAttributes printAttributes) throws Exception {
+  private void convertToPDF(String htmlString, File file, boolean shouldEncode, WritableMap resultMap, Promise promise, String baseURL,PrintAttributes printAttributes, String fileName) throws Exception {
       PdfConverter pdfConverter=PdfConverter.getInstance();
       if(printAttributes!=null) pdfConverter.setPdfPrintAttrs(printAttributes);
-      pdfConverter.convert(mReactContext, htmlString, file, shouldEncode, resultMap, promise, baseURL);
+      pdfConverter.convert(mReactContext, htmlString, file, shouldEncode, resultMap, promise, baseURL, fileName);
   }
 
   private File getTempFile(String fileName) throws IOException {
