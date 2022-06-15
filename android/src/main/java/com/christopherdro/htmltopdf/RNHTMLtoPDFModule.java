@@ -65,9 +65,10 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
 
       if (options.hasKey(DIRECTORY)) {
         String state = Environment.getExternalStorageState();
-        File path = (Environment.MEDIA_MOUNTED.equals(state)) ?
-          new File(mReactContext.getExternalFilesDir(null), options.getString(DIRECTORY)) :
-          new File(mReactContext.getFilesDir(), options.getString(DIRECTORY));
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/PDFTest/");
+        // (Environment.MEDIA_MOUNTED.equals(state)) ?
+        //   new File(mReactContext.getExternalFilesDir(null), options.getString(DIRECTORY)) :
+        //   new File(mReactContext.getFilesDir(), options.getString(DIRECTORY));
 
         if (!path.exists()) {
           if (!path.mkdirs()) {
@@ -91,9 +92,9 @@ public class RNHTMLtoPDFModule extends ReactContextBaseJavaModule {
                 .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
                 .build();
       }
-
+      String finalHTMLString = htmlString.replaceAll("#", "%23");
       convertToPDF(
-        htmlString,
+        finalHTMLString,
         destinationFile,
         options.hasKey(BASE_64) && options.getBoolean(BASE_64),
         Arguments.createMap(),
