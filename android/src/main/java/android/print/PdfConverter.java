@@ -37,7 +37,6 @@ public class PdfConverter implements Runnable {
 
     private Context mContext;
     private String mHtmlString;
-    private String mFileName;
     private File mPdfFile;
     private PrintAttributes mPdfPrintAttrs;
     private boolean mIsCurrentlyConverting;
@@ -66,7 +65,7 @@ public class PdfConverter implements Runnable {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
                     throw new RuntimeException("call requires API level 19");
                 else {
-                    PrintDocumentAdapter documentAdapter = mWebView.createPrintDocumentAdapter(mFileName);
+                    PrintDocumentAdapter documentAdapter = mWebView.createPrintDocumentAdapter();
                     documentAdapter.onLayout(null, getPdfPrintAttrs(), null, new PrintDocumentAdapter.LayoutResultCallback() {
                     }, null);
                     documentAdapter.onWrite(new PageRange[]{PageRange.ALL_PAGES}, getOutputFileDescriptor(), null, new PrintDocumentAdapter.WriteResultCallback() {
@@ -77,10 +76,12 @@ public class PdfConverter implements Runnable {
                                 if (mShouldEncode) {
                                     base64 = encodeFromFile(mPdfFile);
                                 }
-                                // PDDocument myDocument = PDDocument.load(mPdfFile);
-                                // int pagesToBePrinted = myDocument.getNumberOfPages();
+
+                                PDDocument myDocument = PDDocument.load(mPdfFile);
+                                int pagesToBePrinted = myDocument.getNumberOfPages();
+
                                 mResultMap.putString("filePath", mPdfFile.getAbsolutePath());
-                                // mResultMap.putString("numberOfPages", String.valueOf(pagesToBePrinted));
+                                mResultMap.putString("numberOfPages", String.valueOf(pagesToBePrinted));
                                 mResultMap.putString("base64", base64);
                                 mPromise.resolve(mResultMap);
                             } catch (IOException e) {
@@ -131,7 +132,8 @@ public class PdfConverter implements Runnable {
         this.mPdfPrintAttrs = printAttrs;
     }
 
-    public void convert(Context context, String htmlString, File file, boolean shouldEncode, WritableMap resultMap, Promise promise, String baseURL, String fileName) throws Exception {
+    public void convert(Context context, String htmlString, File file, boolean shouldEncode, WritableMap resultMap,
+            Promise promise, String baseURL) throws Exception {
         if (context == null)
             throw new Exception("context can't be null");
         if (htmlString == null)
@@ -150,7 +152,6 @@ public class PdfConverter implements Runnable {
         mResultMap = resultMap;
         mPromise = promise;
         mBaseURL = baseURL;
-        mFileName = fileName;
         runOnUiThread(this);
     }
 
@@ -190,7 +191,6 @@ public class PdfConverter implements Runnable {
         mShouldEncode = false;
         mResultMap = null;
         mPromise = null;
-        mFileName = null;
     }
 
     private String encodeFromFile(File file) throws IOException{
